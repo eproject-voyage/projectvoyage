@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Project Voyage — an early-stage gaming platform concept</title>
+<meta name="description" content="Project Voyage is an early-stage gaming ecosystem built around ownership, trust, and genuine help instead of extraction.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --accent:#E1094F;
+  --text:#111;
+  --muted:#707070;
+  --line:#eee;
+  --bg:#fff;
+  --header:rgba(255,255,255,.9);
+  --field:rgba(0,0,0,.025);
+  --solid:#f7f7f7;
+}
+
+[data-theme="dark"]{
+  --text:#f5f5f5;
+  --muted:#9b9b9b;
+  --line:#2b2b2b;
+  --bg:#0d0d0d;
+  --header:rgba(13,13,13,.9);
+  --field:rgba(255,255,255,.035);
+  --solid:#161616;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+
+body{
+  font-family:"Google Sans",Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  transition:background .35s ease,color .35s ease;
+}
+
+::selection{ background:var(--accent); color:#fff; }
+
+/* header */
+header{
+  position:fixed;
+  inset:0 0 auto;
+  height:72px;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 42px;
+  background:var(--header);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.left-side{ display:flex; align-items:center; gap:42px; }
+
+.logo{
+  color:var(--text);
+  text-decoration:none;
+  font-size:21px;
+  font-weight:700;
+  letter-spacing:-.7px;
+  background:none;
+  border:0;
+  font-family:inherit;
+  cursor:pointer;
+}
+
+.logo:hover{ color:var(--accent); }
+
+nav{ display:flex; align-items:center; gap:28px; }
+
+nav a, nav button.navlink{
+  position:relative;
+  color:var(--muted);
+  text-decoration:none;
+  font-size:15px;
+  font-weight:500;
+  padding:26px 0;
+  transition:color .25s ease;
+  background:none;
+  border:0;
+  font-family:inherit;
+  cursor:pointer;
+}
+
+nav a::after, nav button.navlink::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:17px;
+  width:0;
+  height:2px;
+  border-radius:99px;
+  background:var(--accent);
+  transform:translateX(-50%);
+  transition:width .3s ease;
+}
+
+nav a:hover, nav a.active, nav button.navlink:hover, nav button.navlink.active{ color:var(--accent); }
+nav a:hover::after, nav a.active::after, nav button.navlink:hover::after, nav button.navlink.active::after{ width:100%; }
+
+/* header actions */
+.actions{ display:flex; align-items:center; gap:12px; }
+
+.theme-toggle{
+  width:40px;
+  height:40px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:transparent;
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-size:16px;
+  transition:.25s ease;
+}
+
+.theme-toggle:hover{ color:var(--accent); border-color:var(--accent); }
+.theme-toggle:active{ transform:scale(.92); }
+
+.cta, .send-button{
+  border:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:11px 20px;
+  border-radius:999px;
+  background:var(--accent);
+  color:#fff;
+  text-decoration:none;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.cta:hover, .send-button:hover{ transform:translateY(-2px); }
+.cta:active, .send-button:active{ transform:scale(.97); }
+
+/* pages */
+.page{ display:none; }
+.page.active{ display:block; }
+
+/* sections */
+section{
+  min-height:100vh;
+  padding:130px 42px 110px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  scroll-margin-top:72px;
+}
+
+section + section{
+  border-top:1px solid var(--line);
+}
+
+.hero{ position:relative; text-align:center; }
+.hero-content{ max-width:800px; }
+
+.hero h1{
+  font-size:clamp(54px,8vw,104px);
+  line-height:.92;
+  letter-spacing:-6px;
+  font-weight:700;
+}
+
+.hero p{ margin-top:25px; color:var(--muted); font-size:19px; line-height:1.5; }
+
+.inner{ width:min(1000px,100%); }
+
+.section-label{
+  color:var(--accent);
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:15px;
+}
+
+.inner h2{
+  font-size:clamp(42px,6vw,72px);
+  letter-spacing:-4px;
+  line-height:1;
+  margin-bottom:25px;
+}
+
+.inner p{ max-width:650px; color:var(--muted); font-size:19px; line-height:1.65; }
+.lead{ max-width:720px!important; font-size:20px!important; }
+
+/* info grid / blocks */
+.info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-top:60px;
+}
+
+.info-block{
+  padding:32px;
+  background:var(--field);
+  border-radius:14px;
+  transition:.3s ease;
+}
+
+.info-block:hover{ background:rgba(225,9,79,.05); }
+
+.block-label, .timeline-label, .goal-status{
+  display:block;
+  color:var(--accent);
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+}
+
+.info-block h3{ margin:9px 0; font-size:22px; }
+.info-block p{ font-size:15px!important; line-height:1.55!important; }
+
+/* timeline */
+.timeline{
+  position:relative;
+  margin-top:75px;
+  padding-left:32px;
+  border-left:2px solid var(--line);
+}
+
+.timeline-item{ position:relative; padding:0 0 52px 28px; }
+.timeline-item:last-child{ padding-bottom:0; }
+
+.timeline-point{
+  position:absolute;
+  left:-38px;
+  top:2px;
+  width:12px;
+  height:12px;
+  border:2px solid var(--accent);
+  border-radius:50%;
+  background:var(--bg);
+}
+
+.timeline-item h3{ margin:8px 0 8px; font-size:24px; }
+.timeline-item p{ font-size:16px!important; line-height:1.6!important; }
+
+/* principles list */
+.principles{
+  margin-top:65px;
+  display:flex;
+  flex-direction:column;
+}
+
+.principle{
+  position:relative;
+  display:grid;
+  grid-template-columns:90px 1fr;
+  align-items:start;
+  gap:20px;
+  padding:34px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.principle:first-child{ padding-top:0; }
+.principle:last-child{ border-bottom:0; padding-bottom:0; }
+
+.principle-number{
+  color:var(--line);
+  font-size:56px;
+  font-weight:700;
+  line-height:1;
+  letter-spacing:-2px;
+  transition:color .3s ease;
+}
+
+.principle:hover .principle-number{ color:rgba(225,9,79,.3); }
+
+.principle h3{ margin-bottom:8px; font-size:21px; }
+.principle p{ font-size:16px!important; line-height:1.6!important; max-width:560px; }
+
+/* goals — stepped progress row */
+.goal-list{
+  margin-top:65px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+}
+
+.goal{
+  position:relative;
+  padding:0 24px 0 0;
+  border-left:2px solid var(--line);
+  padding-left:22px;
+}
+
+.goal:first-child{ border-left:2px solid var(--accent); }
+
+.goal-status{
+  display:inline-block;
+  color:var(--accent);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:1px;
+  margin-bottom:12px;
+}
+
+.goal h3{ margin:0 0 10px; font-size:19px; letter-spacing:-.3px; }
+.goal p{ font-size:14px!important; line-height:1.6!important; color:var(--muted); max-width:220px; }
+
+.vision-line{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-top:65px;
+  color:var(--muted);
+  font-size:15px;
+  text-align:center;
+}
+
+.vision-line span{ flex:1; height:1px; background:var(--line); }
+.vision-line strong{ color:var(--text); font-weight:600; }
+
+/* tighten the gap between the goals quote line and the contact-preview section below it */
+#goals{ min-height:auto; padding-bottom:60px; }
+#contact-preview{ min-height:auto; padding-top:60px; padding-bottom:90px; }
+
+/* two-col text blocks used on learn-more / ownership etc */
+.split{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:48px;
+  margin-top:70px;
+}
+.split-label{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  position:sticky;
+  top:110px;
+  align-self:start;
+}
+.split-body h3{ font-size:26px; margin-bottom:14px; letter-spacing:-1px; }
+.split-body p{ max-width:640px; color:var(--muted); font-size:17px; line-height:1.7; margin-bottom:16px; }
+.split-body p:last-child{ margin-bottom:0; }
+.split + .split{ margin-top:56px; padding-top:56px; border-top:1px solid var(--line); }
+
+.callout{
+  margin-top:24px;
+  padding:24px 28px;
+  border-left:3px solid var(--accent);
+  background:var(--field);
+  border-radius:0 14px 14px 0;
+}
+.callout p{ margin:0!important; color:var(--text)!important; font-size:17px!important; font-weight:500; }
+
+.tag-note{
+  display:inline-block;
+  margin-top:18px;
+  font-size:13px;
+  color:var(--muted);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:6px 14px;
+  background:none;
+  cursor:pointer;
+  font-family:inherit;
+  text-decoration:none;
+}
+.tag-note:hover{ border-color:var(--accent); color:var(--accent); }
+
+/* contact / lets begin — SOLID, no shadows, no gradients */
+.contact-wrap{ width:min(760px,100%); }
+
+.contact-card{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:48px;
+  background:var(--solid);
+}
+
+.contact-head{ margin-bottom:30px; }
+.contact-head h2{ margin-bottom:14px; }
+.contact-head p{ max-width:600px; }
+
+.form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.form-group{ display:flex; flex-direction:column; gap:8px; }
+.form-group.full{ grid-column:1/-1; }
+.form-group label{ font-size:13px; font-weight:600; color:var(--text); }
+
+.form-group input, .form-group textarea{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:10px;
+  outline:none;
+  background:var(--bg);
+  color:var(--text);
+  font-family:inherit;
+  font-size:15px;
+  padding:15px 18px;
+  transition:border-color .2s ease;
+}
+
+.form-group input::placeholder, .form-group textarea::placeholder{ color:var(--muted); }
+.form-group input:focus, .form-group textarea:focus{ border-color:var(--accent); }
+.form-group textarea{ min-height:170px; resize:vertical; line-height:1.55; }
+
+/* file upload — solid, flat */
+.file-area{
+  position:relative;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:26px;
+  text-align:center;
+  cursor:pointer;
+  background:var(--bg);
+  transition:border-color .2s ease;
+}
+
+.file-area:hover, .file-area.dragging{ border-color:var(--accent); }
+
+.file-area input{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  cursor:pointer;
+}
+
+.file-title{ font-size:14px; font-weight:600; color:var(--text); }
+.file-subtitle{ margin-top:5px; font-size:12px; color:var(--muted); }
+.file-list{ display:flex; flex-direction:column; gap:8px; margin-top:12px; text-align:left; }
+
+.file-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 14px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  font-size:13px;
+  color:var(--text);
+  background:var(--field);
+}
+
+.remove-file{ border:0; background:transparent; color:var(--muted); cursor:pointer; font-size:16px; line-height:1; }
+.remove-file:hover{ color:var(--accent); }
+
+.form-footer{ display:flex; align-items:center; justify-content:space-between; gap:20px; margin-top:22px; }
+.form-status{ min-height:20px; font-size:13px; color:var(--muted); }
+.form-status.success{ color:var(--accent); }
+.send-button{ border-radius:10px; }
+.send-button:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
+
+/* reveal on scroll */
+.reveal{ opacity:0; transform:translateY(30px); transition:opacity .6s ease, transform .6s ease; }
+.reveal.visible{ opacity:1; transform:translateY(0); }
+
+footer.site-footer{
+  padding:36px 42px;
+  border-top:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  color:var(--muted);
+  font-size:13px;
+}
+footer.site-footer button, footer.site-footer a{ color:var(--muted); text-decoration:none; background:none; border:0; font-family:inherit; font-size:13px; cursor:pointer; }
+footer.site-footer button:hover, footer.site-footer a:hover{ color:var(--accent); }
+.footer-links{ display:flex; gap:20px; }
+
+/* niche dropdown, lives under header nav */
+.niche-dropdown{
+  position:fixed;
+  top:72px;
+  left:0; right:0;
+  z-index:99;
+  background:var(--bg);
+  border-bottom:1px solid var(--line);
+  padding:20px 0;
+  transform:translateY(-8px);
+  opacity:0;
+  pointer-events:none;
+  transition:transform .22s ease, opacity .22s ease;
+}
+.niche-dropdown.open{ transform:translateY(0); opacity:1; pointer-events:auto; }
+.niche-inner{ width:min(1200px,100%); margin:0 auto; padding:0 42px; }
+.niche-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:20px; padding-bottom:16px; }
+.niche-head h2{ font-size:20px; letter-spacing:-.5px; margin-bottom:4px; }
+.niche-head p{ color:var(--muted); font-size:13px; max-width:420px; }
+.niche-arrows{ display:flex; gap:8px; flex-shrink:0; }
+.niche-arrow{
+  width:34px; height:34px; border-radius:50%;
+  border:1px solid var(--line); background:transparent; color:var(--text);
+  display:flex; align-items:center; justify-content:center; font-size:15px; cursor:pointer;
+  transition:.2s ease;
+}
+.niche-arrow:hover{ border-color:var(--accent); color:var(--accent); }
+.niche-track-wrap{ overflow-x:auto; scroll-snap-type:x proximity; padding-bottom:6px; scrollbar-width:thin; }
+.niche-track{ display:flex; align-items:stretch; gap:28px; width:max-content; }
+.niche-card{
+  scroll-snap-align:start;
+  width:250px; flex-shrink:0;
+  border:1px solid var(--line); border-radius:14px;
+  padding:20px; background:var(--field);
+  cursor:pointer; transition:.25s ease;
+  position:relative;
+}
+.niche-card:hover{ border-color:var(--accent); background:rgba(225,9,79,.05); }
+.niche-card.current{
+  border-color:var(--accent);
+  background:rgba(225,9,79,.06);
+}
+.niche-card.current .niche-index{ color:var(--accent); }
+.niche-card.current .niche-go{ color:var(--accent); }
+.niche-card.current .niche-go::after{ content:" · here"; font-weight:700; }
+.niche-card .niche-index{ color:var(--accent); font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; }
+.niche-card h3{ font-size:17px; margin:8px 0 6px; letter-spacing:-.3px; }
+.niche-card p{ font-size:13px!important; line-height:1.5!important; color:var(--muted); }
+.niche-card .niche-go{ margin-top:10px; font-size:12px; color:var(--accent); font-weight:600; display:block; }
+
+/* ===== FAQ page ===== */
+.faq-hero{ min-height:auto; padding:150px 42px 40px; text-align:left; justify-content:flex-start; }
+.faq-hero .inner{ width:min(900px,100%); }
+.faq-hero h1{ font-size:clamp(40px,6vw,64px); letter-spacing:-3px; line-height:1; }
+.faq-hero p{ margin-top:18px; color:var(--muted); font-size:18px; max-width:640px; }
+
+.faq-toolbar{
+  width:min(900px,100%);
+  margin:0 auto;
+  padding:0 42px 40px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.search-wrap{
+  position:relative;
+  border:1px solid rgb(225,9,79);
+  border-radius:10px;
+  background:var(--bg);
+}
+.search-wrap input{
+  width:100%;
+  border:0;
+  outline:none;
+  background:transparent;
+  color:var(--text);
+  font-family:inherit;
+  font-size:16px;
+  padding:16px 46px 16px 18px;
+}
+.search-wrap input::placeholder{ color:var(--muted); }
+.search-icon{
+  position:absolute;
+  right:16px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--muted);
+  font-size:16px;
+  pointer-events:none;
+}
+
+.category-bar{ display:flex; flex-wrap:wrap; gap:10px; }
+.category-chip{
+  border:1px solid var(--line);
+  background:var(--field);
+  color:var(--muted);
+  font-family:inherit;
+  font-size:13px;
+  font-weight:600;
+  padding:9px 16px;
+  border-radius:999px;
+  cursor:pointer;
+  transition:.2s ease;
+}
+.category-chip:hover{ border-color:var(--accent); color:var(--accent); }
+.category-chip.active{ background:var(--accent); border-color:var(--accent); color:#fff; }
+
+.faq-results-meta{ font-size:13px; color:var(--muted); }
+
+.faq-body{ min-height:auto; padding:0 42px 120px; align-items:flex-start; }
+.faq-list{ width:min(900px,100%); margin:0 auto; display:flex; flex-direction:column; gap:0; }
+
+.faq-row{ border-bottom:1px solid var(--line); padding:28px 0; }
+.faq-row:first-child{ padding-top:0; }
+
+.faq-row-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:20px; cursor:pointer; }
+.faq-row-cat{ display:inline-block; margin-bottom:8px; font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:var(--accent); }
+.faq-row h3{ font-size:19px; font-weight:600; line-height:1.35; }
+.faq-toggle-icon{
+  flex-shrink:0;
+  width:28px;
+  height:28px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  color:var(--muted);
+  transition:transform .25s ease, color .2s ease;
+}
+.faq-row.open .faq-toggle-icon{ transform:rotate(45deg); color:var(--accent); border-color:var(--accent); }
+
+.faq-answer{ max-height:0; overflow:hidden; transition:max-height .3s ease; }
+.faq-answer-inner{ padding-top:16px; color:var(--muted); font-size:16px; line-height:1.7; max-width:720px; }
+
+.no-results{ padding:60px 0; text-align:center; color:var(--muted); font-size:16px; display:none; }
+
+blockquote.quote-card, blockquote.quote-divider{ margin:0; }
+.quotes-grid-section{ min-height:auto; padding:60px 42px 140px; align-items:flex-start; }
+.quotes-grid{
+  width:min(900px,100%);
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+}
+.quote-line{
+  padding:34px 0 34px 28px;
+  text-align:left;
+  border-left:3px solid var(--accent);
+}
+.quote-line p{
+  color:var(--text);
+  font-size:clamp(15px,2.4vw,34px)!important;
+  font-weight:600;
+  letter-spacing:-1px;
+  line-height:1.3!important;
+  margin:0!important;
+  max-width:none!important;
+  white-space:nowrap;
+}
+.quote-line p::before, .quote-line p::after{ content:none; }
+.quote-line .quote-mark{ color:var(--accent); }
+
+/* ===== learn more page ===== */
+.learn-hero{ min-height:auto; padding:150px 42px 30px; }
+.learn-jump{
+  width:min(1000px,100%);
+  margin:0 auto;
+  padding:0 42px 50px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.learn-jump button{
+  border:1px solid var(--line);
+  color:var(--muted);
+  background:none;
+  font-family:inherit;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:600;
+  padding:9px 16px;
+  border-radius:999px;
+  cursor:pointer;
+  transition:.2s ease;
+}
+.learn-jump button:hover{ border-color:var(--accent); color:var(--accent); }
+
+.article{ min-height:auto; padding:70px 42px; display:block; }
+.article .inner{ width:min(760px,100%); margin:0 auto; }
+.article h2{ font-size:clamp(34px,5vw,50px); letter-spacing:-2px; margin-bottom:28px; }
+.article p{ max-width:100%; color:var(--muted); font-size:18px; line-height:1.75; margin-bottom:20px; }
+.article p:last-child{ margin-bottom:0; }
+.article h3{ font-size:22px; margin:36px 0 14px; letter-spacing:-.5px; }
+.back-to-top{ display:inline-block; margin-top:40px; font-size:13px; color:var(--accent); text-decoration:none; background:none; border:0; font-family:inherit; cursor:pointer; }
+
+.quote-divider{
+  width:min(640px,100%);
+  margin:0 auto;
+  padding:0 42px;
+}
+.quote-divider p{
+  color:var(--text);
+  font-size:22px;
+  font-weight:600;
+  font-style:normal;
+  letter-spacing:-.5px;
+  line-height:1.4;
+  text-align:center;
+  padding:34px 30px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:var(--field);
+}
+.quote-divider p::before{ content:"“"; color:var(--accent); }
+.quote-divider p::after{ content:"”"; color:var(--accent); }
+
+/* mobile */
+@media(max-width:700px){
+  header{ padding:0 16px; height:60px; }
+  .left-side{ gap:14px; }
+  .logo{ font-size:16px; }
+  nav{ gap:12px; }
+  nav a, nav button.navlink{ font-size:13px; padding:20px 0; }
+  .actions{ gap:6px; }
+  .theme-toggle{ width:34px; height:34px; font-size:14px; }
+  .cta{ padding:9px 13px; font-size:12px; }
+  section{ padding:96px 20px 56px; min-height:auto; scroll-margin-top:60px; }
+  .hero{ padding-top:120px; padding-bottom:80px; }
+  .hero h1{ letter-spacing:-3px; }
+  .hero p{ font-size:16px; margin-top:18px; }
+  .inner h2{ letter-spacing:-2px; margin-bottom:20px; }
+  .inner p, .lead{ font-size:16px!important; line-height:1.6!important; }
+  .section-label{ margin-bottom:12px; }
+  .info-grid{ grid-template-columns:1fr; gap:14px; margin-top:40px; }
+  .info-block{ padding:24px; border-radius:14px; }
+  .principles{ margin-top:44px; }
+  .principle{ grid-template-columns:56px 1fr; gap:14px; padding:26px 0; }
+  .principle-number{ font-size:36px; }
+  .principle h3{ font-size:19px; }
+  .form-grid{ grid-template-columns:1fr; gap:14px; }
+  .form-group.full{ grid-column:auto; }
+  .contact-card{ padding:28px 22px; border-radius:16px; }
+  .contact-head{ margin-bottom:24px; }
+  .timeline{ margin-top:48px; padding-left:24px; }
+  .timeline-item{ padding-bottom:40px; }
+  .timeline-point{ left:-30px; }
+  .timeline-item h3{ font-size:20px; }
+  .goal-list{ margin-top:44px; grid-template-columns:1fr; gap:28px; }
+  .goal{ border-left:0; border-top:2px solid var(--line); padding-left:0; padding-top:20px; }
+  .goal:first-child{ border-top:2px solid var(--accent); }
+  .goal p{ max-width:none; }
+  .goal h3{ font-size:19px; }
+  .vision-line{ margin-top:48px; flex-direction:column; gap:10px; }
+  .vision-line span{ display:none; }
+  .split{ grid-template-columns:1fr; gap:16px; margin-top:48px; }
+  .split-label{ position:static; }
+  .split + .split{ margin-top:40px; padding-top:40px; }
+  .form-footer{ align-items:stretch; flex-direction:column-reverse; gap:14px; margin-top:20px; }
+  .form-status{ text-align:center; }
+  .send-button{ width:100%; padding:14px 20px; }
+  .file-area{ padding:22px 18px; }
+  footer.site-footer{ flex-direction:column; align-items:flex-start; gap:12px; padding:28px 20px; }
+  .niche-dropdown{ top:60px; padding:16px 0; }
+  .niche-inner{ padding:0 20px; }
+  .niche-head{ padding-bottom:12px; flex-direction:column; align-items:flex-start; gap:10px; }
+  .niche-arrows{ display:none; }
+  .niche-track-wrap{ padding-bottom:6px; }
+  .niche-card{ width:210px; padding:16px; }
+  .quotes-grid{ gap:0; }
+  .quotes-grid-section{ padding:40px 20px 80px; }
+  .quote-line{ padding:22px 0 22px 16px; }
+  .quote-line p{ font-size:15px!important; }
+}
+
+@media(max-width:420px){
+  .hero h1{ letter-spacing:-2px; }
+  section{ padding-left:16px; padding-right:16px; }
+  .contact-card{ padding:24px 18px; }
+}
+
+@media(prefers-reduced-motion:reduce){
+  *, *::before, *::after{
+    scroll-behavior:auto!important;
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="left-side">
+    <button class="logo" onclick="goPage('home')">Project Voyage</button>
+    <nav>
+      <a href="#home/project" onclick="goPage('home','project');return false;">Project</a>
+      <a href="#home/about" onclick="goPage('home','about');return false;">About</a>
+      <a href="#home/goals" onclick="goPage('home','goals');return false;">Goals</a>
+      <button class="navlink" id="exploreTrigger" aria-expanded="false" aria-controls="nicheDropdown">Explore ▾</button>
+    </nav>
+  </div>
+  <div class="actions">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
+    <a href="#begin/contact" class="cta" onclick="goPage('begin','contact');return false;">Email</a>
+  </div>
+</header>
+
+<div class="niche-dropdown" id="nicheDropdown">
+  <div class="niche-inner">
+  <div class="niche-head">
+    <div>
+      <h2>Explore the philosophy.</h2>
+      <p>Swipe through the principles that shape Project Voyage.</p>
+    </div>
+    <div class="niche-arrows">
+      <button class="niche-arrow" id="nicheLeft" aria-label="Scroll left">←</button>
+      <button class="niche-arrow" id="nicheRight" aria-label="Scroll right">→</button>
+    </div>
+  </div>
+  <div class="niche-track-wrap" id="nicheTrackWrap">
+    <div class="niche-track">
+      <div class="niche-card" data-target="project" onclick="goPage('home','project');closeNiche();">
+        <span class="niche-index">01</span>
+        <h3>Project</h3>
+        <p>What Voyage is building, and where it stands right now.</p>
+        <span class="niche-go">View section →</span>
+      </div>
+      <div class="niche-card" data-target="about" onclick="goPage('home','about');closeNiche();">
+        <span class="niche-index">02</span>
+        <h3>About</h3>
+        <p>Why Project Voyage exists, and what it's reacting against.</p>
+        <span class="niche-go">View section →</span>
+      </div>
+      <div class="niche-card" data-target="goals" onclick="goPage('home','goals');closeNiche();">
+        <span class="niche-index">03</span>
+        <h3>Goals</h3>
+        <p>How Voyage is being built in stages, from foundation to growth.</p>
+        <span class="niche-go">View section →</span>
+      </div>
+
+      <div class="niche-card" data-target="learn-ownership" onclick="goPage('learn','learn-ownership');closeNiche();">
+        <span class="niche-index">04</span>
+        <h3>Ownership</h3>
+        <p>You bought it. It's yours — keep it, copy it, sell it once.</p>
+        <span class="niche-go">View section →</span>
+      </div>
+      <div class="niche-card" data-target="learn-refunds" onclick="goPage('learn','learn-refunds');closeNiche();">
+        <span class="niche-index">05</span>
+        <h3>Refunds</h3>
+        <p>Trust-based refunds, and why they're more than a transaction.</p>
+        <span class="niche-go">View section →</span>
+      </div>
+      <div class="niche-card" data-target="learn-academy" onclick="goPage('learn','learn-academy');closeNiche();">
+        <span class="niche-index">06</span>
+        <h3>Academy</h3>
+        <p>Help instead of punishment — education for players and parents.</p>
+        <span class="niche-go">View section →</span>
+      </div>
+
+      <div class="niche-card" data-target="faq" onclick="goPage('faq');closeNiche();">
+        <span class="niche-index">07</span>
+        <h3>FAQ</h3>
+        <p>Searchable answers, including the parts still unresolved.</p>
+        <span class="niche-go">View section →</span>
+      </div>
+      <div class="niche-card" data-target="learn-family" onclick="goPage('learn','learn-family');closeNiche();">
+        <span class="niche-index">08</span>
+        <h3>Family & children</h3>
+        <p>“Your kid is ours too” — safety and responsibility, shared.</p>
+        <span class="niche-go">View section →</span>
+      </div>
+      <div class="niche-card" data-target="learn-economics" onclick="goPage('learn','learn-economics');closeNiche();">
+        <span class="niche-index">09</span>
+        <h3>Economics</h3>
+        <p>The honest, unresolved part: what keeps a ship like this afloat.</p>
+        <span class="niche-go">View section →</span>
+      </div>
+      <div class="niche-card" data-target="quotes" onclick="goPage('quotes');closeNiche();">
+        <span class="niche-index">10</span>
+        <h3>Quotes</h3>
+        <p>Direct lines on ownership, trust, and what this project actually promises.</p>
+        <span class="niche-go">View section →</span>
+      </div>
+
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ================= HOME PAGE ================= -->
+<div class="page active" id="page-home">
+
+<section id="home" class="hero">
+  <div class="hero-content">
+    <h1>Project Voyage</h1>
+    <p>A gaming ecosystem built around the player, not around extracting from them.</p>
+  </div>
+</section>
+
+<section id="project">
+  <div class="inner reveal">
+    <div class="section-label">Project</div>
+    <h2>What Voyage is building.</h2>
+    <p class="lead">
+      Project Voyage is the development name for a future gaming platform. Its eventual
+      goal is a single application that brings together the storefront,
+      library, communities, voice chat, achievements, and support that are currently
+      scattered across a dozen different services. Not a full operating system, but an
+      application built to feel like one.
+    </p>
+
+    <div class="info-grid">
+      <div class="info-block">
+        <span class="block-label">Current Progress</span>
+        <h3>Foundation</h3>
+        <p>The philosophy, principles, identity, and prototype are being defined before any of it is built at scale.</p>
+      </div>
+      <div class="info-block">
+        <span class="block-label">Status</span>
+        <h3>In development, honestly</h3>
+        <p>There is no company, no catalog, no infrastructure yet. Voyage starts from one person and an idea worth building carefully.</p>
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <span class="timeline-point"></span>
+        <div>
+          <span class="timeline-label">01 · Philosophy</span>
+          <h3>Decide what it stands for</h3>
+          <p>Ownership, trust, and help had to be defined clearly before anything else could be designed around them.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-point"></span>
+        <div>
+          <span class="timeline-label">02 · Identity</span>
+          <h3>Give it a shape</h3>
+          <p>The name, the mascot, the tone, and the structure of the eventual application.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-point"></span>
+        <div>
+          <span class="timeline-label">03 · Architecture</span>
+          <h3>Work out how it could actually run</h3>
+          <p>Storefront, library, activation, refunds, and community systems, designed before they're built.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-point"></span>
+        <div>
+          <span class="timeline-label">04 · Build</span>
+          <h3>Bring in developers and players</h3>
+          <p>A real catalog and a real community only come once the foundation can actually support them.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="inner reveal">
+    <div class="section-label">About</div>
+    <h2>Why Project Voyage exists.</h2>
+    <p class="lead">
+      Gaming platforms have quietly shifted from asking “how do we build something good
+      for this player” to “how much more can we extract from this player.” Purchases feel
+      like rented access. Refunds are rigid. Everything is tied to an account you don’t
+      fully control. Project Voyage is a response to that — not because developers are the
+      enemy, but because the player deserves to be treated as a person first and a
+      revenue source second.
+    </p>
+
+    <div class="principles">
+      <div class="principle">
+        <span class="principle-number">01</span>
+        <div>
+          <h3>Trust over suspicion</h3>
+          <p>Some people will abuse generous systems. That isn't a reason to strip kindness and freedom from everyone else.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <span class="principle-number">02</span>
+        <div>
+          <h3>You own what you buy</h3>
+          <p>A purchase is ownership, not a temporary license the platform can quietly take back.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <span class="principle-number">03</span>
+        <div>
+          <h3>Help before punishment</h3>
+          <p>A mistake or a hard situation deserves a fix and, where possible, real assistance — not a rulebook.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <span class="principle-number">04</span>
+        <div>
+          <h3>Players and developers both matter</h3>
+          <p>Being player-first doesn't mean developers go unpaid. A real platform has to work for both sides.</p>
+        </div>
+      </div>
+      <div class="principle">
+        <span class="principle-number">05</span>
+        <div>
+          <h3>Honesty about what's unsolved</h3>
+          <p>Voyage says plainly what exists, what doesn't, and what's still just a plan.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="goals">
+  <div class="inner reveal">
+    <div class="section-label">Goals</div>
+    <h2>Where Voyage is going.</h2>
+    <p class="lead">
+      This is an enormous idea. The first step doesn't have to be. It's being
+      built in stages, and each one only starts once the last is actually solid.
+    </p>
+
+    <div class="goal-list">
+      <div class="goal">
+        <span class="goal-status">NOW</span>
+        <h3>Define the philosophy</h3>
+        <p>Ownership, refunds, trust, and the Academy, written clearly enough that anyone can understand what Project Voyage is meant to become.</p>
+      </div>
+      <div class="goal">
+        <span class="goal-status">NEXT</span>
+        <h3>Bring people in</h3>
+        <p>Talk to early players, developers, and anyone who wants to help shape a platform that doesn't exist yet.</p>
+      </div>
+      <div class="goal">
+        <span class="goal-status">BUILD</span>
+        <h3>Prototype the systems</h3>
+        <p>Storefront, library, activation, communities — designed and tested before they're promised to anyone.</p>
+      </div>
+      <div class="goal">
+        <span class="goal-status">GROW</span>
+        <h3>Grow without losing the point</h3>
+        <p>Expand the catalog and the community while keeping the principles intact, not traded away for growth.</p>
+      </div>
+    </div>
+
+    <div class="vision-line">
+      <span></span>
+      <p>The features can change. <strong>The reason for building shouldn't.</strong></p>
+      <span></span>
+    </div>
+  </div>
+</section>
+
+<section id="contact-preview">
+  <div class="contact-wrap reveal">
+    <div class="contact-card">
+      <div class="contact-head">
+        <div class="section-label">Get Started</div>
+        <h2>Let's begin.</h2>
+        <p>Have something to say — a question, an idea, interest in helping build this? Send a message directly.</p>
+      </div>
+      <button class="cta" style="width:100%;padding:15px 20px;font-size:15px;" onclick="goPage('begin')">Go to the message form</button>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <span>Project Voyage · early-stage, built in the open</span>
+  <div class="footer-links">
+    <button onclick="goPage('home')">Home</button>
+    <button onclick="goPage('faq')">FAQ</button>
+    <button onclick="goPage('quotes')">Quotes</button>
+    <a href="#begin/contact" onclick="goPage('begin','contact');return false;">Email</a>
+  </div>
+</footer>
+
+</div>
+
+<!-- ================= FAQ PAGE ================= -->
+<div class="page" id="page-faq">
+
+<section class="faq-hero">
+  <div class="inner reveal">
+    <h1>Frequently asked</h1>
+    <p>Honest answers, including for the parts that aren't solved yet. Search or filter by category to find what you're looking for.</p>
+  </div>
+</section>
+
+<div class="faq-toolbar">
+  <div class="search-wrap">
+    <input type="text" id="faqSearch" placeholder="Search the FAQ…" autocomplete="off">
+    <span class="search-icon">⌕</span>
+  </div>
+  <div class="category-bar" id="categoryBar">
+    <button class="category-chip active" data-cat="all">All</button>
+    <button class="category-chip" data-cat="general">General</button>
+    <button class="category-chip" data-cat="ownership">Ownership</button>
+    <button class="category-chip" data-cat="refunds">Refunds</button>
+    <button class="category-chip" data-cat="developers">Developers</button>
+    <button class="category-chip" data-cat="business">Business & risk</button>
+    <button class="category-chip" data-cat="platform">Platform</button>
+  </div>
+  <div class="faq-results-meta" id="resultsMeta"></div>
+</div>
+
+<section class="faq-body">
+  <div class="faq-list" id="faqList"></div>
+  <div class="no-results" id="noResults">No questions match your search.</div>
+</section>
+
+<footer class="site-footer">
+  <span>Project Voyage · early-stage, built in the open</span>
+  <div class="footer-links">
+    <button onclick="goPage('home')">Home</button>
+    <button onclick="goPage('faq')">FAQ</button>
+    <button onclick="goPage('quotes')">Quotes</button>
+    <a href="#begin/contact" onclick="goPage('begin','contact');return false;">Email</a>
+  </div>
+</footer>
+
+</div>
+
+<!-- ================= LET'S BEGIN PAGE ================= -->
+<div class="page" id="page-begin">
+
+<section class="hero" style="min-height:auto; padding:150px 42px 20px; text-align:left; justify-content:flex-start;">
+  <div class="inner reveal" style="text-align:left;">
+    <div class="section-label">Get Started</div>
+    <h2 style="max-width:700px; font-size:clamp(42px,6vw,72px); letter-spacing:-4px;">Let's begin.</h2>
+    <p class="lead">Questions, ideas, interest in helping build this — whatever it is, send it directly. This is read by the person actually building Project Voyage.</p>
+  </div>
+</section>
+
+<section id="contact" style="min-height:auto; padding-top:20px; padding-bottom:120px;">
+  <div class="contact-wrap reveal">
+    <div class="contact-card">
+      <div class="contact-head">
+        <div class="section-label">Message</div>
+        <h2>Send a message.</h2>
+        <p>Attach images if they help explain your question or idea.</p>
+      </div>
+
+      <form id="messageForm">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="subject">Message title</label>
+            <input id="subject" name="subject" type="text" placeholder="e.g. Question about the refund system" maxlength="120" required>
+          </div>
+          <div class="form-group">
+            <label for="name">Your name</label>
+            <input id="name" name="name" type="text" placeholder="e.g. Sam" autocomplete="name" maxlength="80" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Your email</label>
+            <input id="email" name="email" type="email" placeholder="e.g. sam@email.com — so we can reply" autocomplete="email" required>
+          </div>
+          <div class="form-group full">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="e.g. I have an idea for the Academy section..." maxlength="5000" required></textarea>
+          </div>
+          <div class="form-group full">
+            <label>Attach images</label>
+            <div class="file-area" id="fileArea">
+              <input id="attachments" name="attachments" type="file" accept="image/*" multiple>
+              <div class="file-title">Add images</div>
+              <div class="file-subtitle">Click or drag images here</div>
+              <div class="file-list" id="fileList"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <div class="form-status" id="formStatus"></div>
+          <button class="send-button" id="sendButton" type="submit">Send Message</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <span>Project Voyage · early-stage, built in the open</span>
+  <div class="footer-links">
+    <button onclick="goPage('home')">Home</button>
+    <button onclick="goPage('faq')">FAQ</button>
+    <button onclick="goPage('quotes')">Quotes</button>
+    <a href="#begin/contact" onclick="goPage('begin','contact');return false;">Email</a>
+  </div>
+</footer>
+
+</div>
+
+<!-- ================= LEARN MORE PAGE ================= -->
+<div class="page" id="page-learn">
+
+<section class="learn-hero">
+  <div class="inner reveal">
+    <div class="section-label">Learn more</div>
+    <h2 style="font-size:clamp(40px,6vw,64px); letter-spacing:-3px;">The philosophy, in full.</h2>
+    <p class="lead">The homepage covers the short version. These are the fuller explanations behind each principle.</p>
+  </div>
+</section>
+
+<div class="learn-jump">
+  <button onclick="jumpTo('learn-ownership')">Ownership</button>
+  <button onclick="jumpTo('learn-refunds')">Refunds</button>
+  <button onclick="jumpTo('learn-academy')">Academy</button>
+  <button onclick="jumpTo('learn-family')">Family & children</button>
+  <button onclick="jumpTo('learn-economics')">The economics</button>
+</div>
+
+<section id="learn-ownership" class="article" style="padding-top:100px;">
+  <div class="inner reveal">
+    <div class="section-label">Ownership</div>
+    <h2>You bought it. It's yours.</h2>
+    <p class="lead">
+      A legitimate purchase on Project Voyage means ownership of the game, not permission to
+      access it for as long as the platform allows. That ownership is meant to carry
+      real rights.
+    </p>
+
+    <div class="split">
+      <div class="split-label">Keep, copy, transfer</div>
+      <div class="split-body">
+        <h3>What ownership includes</h3>
+        <p>If you legitimately own a game, you can keep it, make a physical copy for yourself, give that copy away, sell it, or transfer it digitally or physically. It's treated the way owning a physical object has always been treated.</p>
+        <div class="callout"><p>You can sell what you owned — once. Ownership isn't meant to become a reselling business built on repeatedly buying and flipping the same title.</p></div>
+      </div>
+    </div>
+
+    <div class="split">
+      <div class="split-label">Physical copies</div>
+      <div class="split-body">
+        <h3>Physical and digital, kept distinct</h3>
+        <p>Possessing a physical copy doesn't automatically put a game in your Project Voyage library. The two are related but separate. You can play a physical copy you legitimately obtained without it granting library features like achievements or cloud sync.</p>
+        <p>If you want it tied to your account, an activation code can attach it to your library — at a price you choose, down to whatever covers the transaction cost. Project Voyage isn't intended to profit twice from a game you already paid for once.</p>
+      </div>
+    </div>
+  </div>
+  <div class="inner"><button class="back-to-top" onclick="jumpTo('learn-top')">↑ Back to top</button></div>
+</section>
+
+<blockquote class="quote-divider">
+  <p>“A refund shouldn’t feel like a confession.”</p>
+</blockquote>
+
+<section id="learn-refunds" class="article" style="padding-top:60px;">
+  <div class="inner reveal">
+    <div class="section-label">Refunds</div>
+    <h2>You need it back? We'll trust you.</h2>
+    <p class="lead">
+      There's no two-hour cutoff, no interrogation, no assumption that you're trying to
+      cheat the system. A refund can be requested shortly after purchase or years later —
+      because you no longer want it, because your circumstances changed, or simply
+      because you need the money.
+    </p>
+
+    <div class="split">
+      <div class="split-label">Trust, not a loophole</div>
+      <div class="split-body">
+        <h3>Good faith goes both ways</h3>
+        <p>This isn't an invitation to buy, finish, and refund every game on repeat. Project Voyage trusts you to understand the difference between genuinely needing a refund and exploiting a system built on trust. Most people will use that freedom honestly. Some won't — and that's an accepted cost of not treating every player as a suspect.</p>
+      </div>
+    </div>
+
+    <div class="split">
+      <div class="split-label">More than a transaction</div>
+      <div class="split-body">
+        <h3>A refund can be where help starts</h3>
+        <p>Sometimes a refund request points to something bigger — financial hardship, a child’s unauthorized purchase, a difficult stretch of life. The response isn’t just “refund approved.” It’s the refund, followed by an honest question: is there something bigger going on here that we could actually help with?</p>
+      </div>
+    </div>
+  </div>
+  <div class="inner"><button class="back-to-top" onclick="jumpTo('learn-top')">↑ Back to top</button></div>
+</section>
+
+<blockquote class="quote-divider">
+  <p>“A mistake deserves a lesson, not a lecture.”</p>
+</blockquote>
+
+<section id="learn-academy" class="article" style="padding-top:100px;">
+  <div class="inner reveal">
+    <div class="section-label">Academy</div>
+    <h2>Help instead of punishment.</h2>
+    <p>Project Voyage is envisioned to include a full educational system, sometimes described as the Academy. It isn’t there to shame people for their mistakes — it’s there to help them avoid the same problem next time. For parents, that could mean guidance on parental controls, purchase approvals, and helping a child understand digital spending. For players, it could mean resources on impulse spending, account security, and healthy gaming habits. For children, it could mean simple, age-appropriate lessons about digital money, asking before buying, and staying safe online.</p>
+    <p>The tone is meant to be “you had a problem, here’s how to understand it,” not “you screwed up.” A refund or a support conversation is treated as a moment where real help is possible, not just a ticket to close.</p>
+  </div>
+  <div class="inner"><button class="back-to-top" onclick="jumpTo('learn-top')">↑ Back to top</button></div>
+</section>
+
+<blockquote class="quote-divider">
+  <p>“A parent’s card and a child’s curiosity deserve a refund, not a punishment.”</p>
+</blockquote>
+
+<section id="learn-family" class="article" style="padding-top:100px;">
+  <div class="inner reveal">
+    <div class="section-label">Family & children</div>
+    <h2>“Your kid is ours too.”</h2>
+    <p>Children are a particular responsibility in this philosophy. A parent is responsible for raising their child, but if Project Voyage creates the environment where that child spends their time, it carries some responsibility for making that environment safe. That doesn’t mean replacing parents — it means providing safe defaults, clear parental controls, and honest help when something goes wrong.</p>
+    <p>If a child spends money on a parent’s card without permission, the intended response isn’t “the terms were violated, that’s final.” It’s a refund, given first, along with clear guidance on setting up controls — and then an open question about whether there’s a bigger reason that amount of money is causing that much stress. Not as an interrogation. Because the platform actually wants to know if it can help.</p>
+  </div>
+  <div class="inner"><button class="back-to-top" onclick="jumpTo('learn-top')">↑ Back to top</button></div>
+</section>
+
+<blockquote class="quote-divider">
+  <p>“Kindness isn’t free. We’re paying for it anyway.”</p>
+</blockquote>
+
+<section id="learn-economics" class="article" style="padding-top:100px;">
+  <div class="inner reveal">
+    <div class="section-label">Economics</div>
+    <h2>The hard part: making this sustainable.</h2>
+    <p>None of this is free to run. Lifetime refunds carry real abuse risk. Resale can compete with new digital sales. Physical copies can reduce direct storefront revenue. Generous assistance, infrastructure, support staff, moderation, and developer payouts all cost real money. These aren't being ignored — they're treated as engineering and business problems to work through, not reasons to abandon the philosophy before it's even been tried.</p>
+    <p>Being player-first doesn't mean developers don't matter, games should be free, or fraud should be ignored. It means that where there's a choice between designing around extracting more from the player and designing around respecting them, Project Voyage leans toward the player — while still needing to survive, pay developers, and keep the lights on. The exact commission structure, revenue split, and business model aren't decided yet. They're genuinely open questions.</p>
+  </div>
+  <div class="inner"><button class="back-to-top" onclick="jumpTo('learn-top')">↑ Back to top</button></div>
+</section>
+
+<footer class="site-footer">
+  <span>Project Voyage · early-stage, built in the open</span>
+  <div class="footer-links">
+    <button onclick="goPage('home')">Home</button>
+    <button onclick="goPage('faq')">FAQ</button>
+    <button onclick="goPage('quotes')">Quotes</button>
+    <a href="#begin/contact" onclick="goPage('begin','contact');return false;">Email</a>
+  </div>
+</footer>
+
+</div>
+
+<!-- ================= QUOTES PAGE ================= -->
+<div class="page" id="page-quotes">
+
+<section class="learn-hero">
+  <div class="inner reveal">
+    <div class="section-label">Quotes</div>
+    <h2 style="font-size:clamp(40px,6vw,64px); letter-spacing:-3px;">Lines worth repeating.</h2>
+    <p class="lead">Direct lines pulled from the philosophy behind Project Voyage — what it promises, what it risks, and what it still hasn't figured out.</p>
+  </div>
+</section>
+
+<section class="quotes-grid-section">
+  <div class="quotes-grid">
+    <blockquote class="quote-line"><p><span class="quote-mark">“</span>A game you can’t sell was never really yours.<span class="quote-mark">”</span></p></blockquote>
+    <blockquote class="quote-line"><p><span class="quote-mark">“</span>Nobody grows up dreaming of being an engagement metric.<span class="quote-mark">”</span></p></blockquote>
+    <blockquote class="quote-line"><p><span class="quote-mark">“</span>Assume everyone’s a thief, and you’ll build a prison, not a platform.<span class="quote-mark">”</span></p></blockquote>
+    <blockquote class="quote-line"><p><span class="quote-mark">“</span>Nobody wrecks a ship on purpose. Build for the wreck, not just the voyage.<span class="quote-mark">”</span></p></blockquote>
+    <blockquote class="quote-line"><p><span class="quote-mark">“</span>Once a voyage, once a shipwreck.<span class="quote-mark">”</span></p></blockquote>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <span>Project Voyage · early-stage, built in the open</span>
+  <div class="footer-links">
+    <button onclick="goPage('home')">Home</button>
+    <button onclick="goPage('faq')">FAQ</button>
+    <a href="#begin/contact" onclick="goPage('begin','contact');return false;">Email</a>
+  </div>
+</footer>
+
+</div>
+
+<script>
+/* grab these first — goPage/closeNiche reference them immediately on load */
+const exploreTrigger = document.getElementById("exploreTrigger");
+const nicheDropdown = document.getElementById("nicheDropdown");
+
+function closeNiche() {
+  if (!nicheDropdown) return;
+  nicheDropdown.classList.remove("open");
+  if (exploreTrigger) exploreTrigger.setAttribute("aria-expanded", "false");
+}
+
+/* ===== page routing ===== */
+function markCurrentNiche(page, sectionId) {
+  const current = sectionId || page;
+  document.querySelectorAll(".niche-card").forEach((card) => {
+    card.classList.toggle("current", card.dataset.target === current);
+  });
+}
+
+function goPage(page, sectionId) {
+  document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
+  const target = document.getElementById("page-" + page);
+  if (target) target.classList.add("active");
+  window.scrollTo(0, 0);
+  updateNavActive(page);
+  window.location.hash = sectionId ? page + "/" + sectionId : page;
+  if (sectionId) {
+    requestAnimationFrame(() => {
+      const el = document.getElementById(sectionId);
+      if (el) el.scrollIntoView();
+    });
+  }
+  if (page === "faq" && !faqRendered) renderFaq();
+  if (typeof closeNiche === "function") closeNiche();
+  markCurrentNiche(page, sectionId);
+}
+
+function jumpTo(id) {
+  if (id === "learn-top") { window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth" });
+}
+
+function updateNavActive(page) {
+  document.querySelectorAll("nav a, nav button.navlink").forEach((l) => l.classList.remove("active"));
+  if (page === "faq") {
+    const faqBtn = document.querySelector("nav button.navlink");
+    if (faqBtn) faqBtn.classList.add("active");
+  }
+}
+
+function routeFromHash() {
+  const hash = window.location.hash.replace("#", "");
+  if (!hash) { goPage("home"); return; }
+  const [page, sectionId] = hash.split("/");
+  goPage(page || "home", sectionId);
+}
+
+window.addEventListener("hashchange", routeFromHash);
+routeFromHash();
+
+/* nav highlight on scroll within home page */
+const navSections = document.querySelectorAll("#page-home section[id]");
+const navLinks = document.querySelectorAll("nav a[href^='#home']");
+if (navSections.length && navLinks.length) {
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      if (!document.getElementById("page-home").classList.contains("active")) return;
+      navLinks.forEach((link) => link.classList.toggle("active", link.getAttribute("href") === "#home/" + entry.target.id));
+      markCurrentNiche("home", entry.target.id);
+    });
+  }, { threshold: .45 });
+  navSections.forEach((s) => navObserver.observe(s));
+}
+
+/* learn-more page: mark current niche card while scrolling between articles */
+const learnArticles = document.querySelectorAll("#page-learn .article[id]");
+if (learnArticles.length) {
+  const learnObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      if (!document.getElementById("page-learn").classList.contains("active")) return;
+      markCurrentNiche("learn", entry.target.id);
+    });
+  }, { threshold: .4 });
+  learnArticles.forEach((a) => learnObserver.observe(a));
+}
+
+/* fade in sections as you scroll */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: .12 });
+document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
+
+/* explore dropdown */
+exploreTrigger.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const open = nicheDropdown.classList.toggle("open");
+  exploreTrigger.setAttribute("aria-expanded", String(open));
+});
+
+document.addEventListener("click", (e) => {
+  if (!nicheDropdown.contains(e.target) && e.target !== exploreTrigger) closeNiche();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeNiche();
+});
+
+/* niche carousel arrows */
+const nicheWrap = document.getElementById("nicheTrackWrap");
+const nicheLeft = document.getElementById("nicheLeft");
+const nicheRight = document.getElementById("nicheRight");
+if (nicheWrap && nicheLeft && nicheRight) {
+  nicheLeft.addEventListener("click", () => nicheWrap.scrollBy({ left: -270, behavior: "smooth" }));
+  nicheRight.addEventListener("click", () => nicheWrap.scrollBy({ left: 270, behavior: "smooth" }));
+}
+
+/* dark mode toggle */
+const themeToggle = document.getElementById("themeToggle");
+const savedTheme = localStorage.getItem("voyage-theme");
+if (savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme:dark)").matches)) {
+  document.documentElement.dataset.theme = "dark";
+}
+function updateThemeIcon() {
+  themeToggle.textContent = document.documentElement.dataset.theme === "dark" ? "☀" : "◐";
+}
+updateThemeIcon();
+themeToggle.addEventListener("click", () => {
+  const dark = document.documentElement.dataset.theme === "dark";
+  document.documentElement.dataset.theme = dark ? "light" : "dark";
+  localStorage.setItem("voyage-theme", dark ? "light" : "dark");
+  updateThemeIcon();
+});
+
+/* ===== FAQ ===== */
+const CATEGORY_LABELS = {
+  general: "General", ownership: "Ownership", refunds: "Refunds",
+  developers: "Developers", business: "Business & risk", platform: "Platform"
+};
+
+const FAQS = [
+  { cat: "general", q: "Isn’t this impossible?", a: "Maybe. Building a full gaming ecosystem from one person and an idea is an enormous undertaking, and Voyage doesn’t pretend otherwise. What’s realistic right now is the philosophy, the design, and a prototype — not a finished Steam-scale platform. Every big platform started as something much smaller than what it became." },
+  { cat: "general", q: "Is this just Steam?", a: "No. A storefront and library are part of it, but Project Voyage is meant to also fold in communities, voice chat, achievements, and support into one application — and more importantly, it starts from a different relationship with the player: ownership and trust instead of licensed access." },
+  { cat: "general", q: "Is this just Discord?", a: "No. Voice chat and communities are part of the plan, but they exist inside a gaming platform built around your library and your games, not as a separate app you have to leave the game to open." },
+  { cat: "platform", q: "Is this an operating system?", a: "No. It’s a Windows application. The “operating system” framing is about how it feels to use — a complete gaming environment — not a literal replacement for Windows." },
+  { cat: "developers", q: "How would developers make money?", a: "Developers still need to be paid fairly for a real storefront to exist — that isn’t in question. The exact commission, payout structure, and onboarding process aren’t finalized yet, and Voyage isn’t going to invent numbers just to sound complete before they’re actually decided." },
+  { cat: "developers", q: "How would games get onto the platform?", a: "Eventually through a developer publishing system — builds, store pages, pricing, and support tools like any modern storefront. Project Voyage does not currently have developer relationships or a game catalog, and it says so plainly rather than implying otherwise." },
+  { cat: "refunds", q: "What stops people from abusing refunds?", a: "Nothing forces good behavior — the system is built on trust rather than restriction. Project Voyage expects players to understand the difference between genuinely needing a refund and exploiting a system that assumes good faith. Some people will abuse that. The philosophy is that punishing everyone else for it isn’t worth the cost." },
+  { cat: "refunds", q: "Why allow lifetime refunds?", a: "Because a two-hour cutoff treats every player like a suspected thief. Most refund requests are legitimate — financial hardship, a change of mind, a purchase that didn’t work out. A refund can also be the first sign of a bigger problem worth helping with, not just a transaction to close out." },
+  { cat: "ownership", q: "What happens when you sell a game you own?", a: "It’s gone from your library — you can’t keep playing it and resell it too. And you can sell a given copy once; ownership isn’t intended to become a business built on repeatedly buying and flipping the same title at scale." },
+  { cat: "ownership", q: "What happens to a physical copy?", a: "It remains playable on its own. It doesn’t automatically join your digital library — that requires a separate, low-cost activation step, because you already paid for the game once through the physical market." },
+  { cat: "business", q: "How does the project make money?", a: "This isn’t finalized. A sustainable model still has to exist — infrastructure, support, and developer payouts all cost real money. The commitment is that survival shouldn’t require treating the player as an adversary, not that Project Voyage has unlimited resources or can ignore economics." },
+  { cat: "business", q: "What happens if Project Voyage itself shuts down?", a: "This is one of the hardest unresolved questions in the whole philosophy, especially given the ownership promise. It doesn’t have a finished answer yet, and we'd rather say that clearly than invent a reassuring one." }
+];
+
+let faqRendered = false;
+let activeCat = "all";
+
+function renderFaq() {
+  faqRendered = true;
+  const listEl = document.getElementById("faqList");
+  const searchEl = document.getElementById("faqSearch");
+  const metaEl = document.getElementById("resultsMeta");
+  const noResultsEl = document.getElementById("noResults");
+  const chips = document.querySelectorAll(".category-chip");
+
+  function draw() {
+    const query = searchEl.value.trim().toLowerCase();
+    const filtered = FAQS.filter((item) => {
+      const matchesCat = activeCat === "all" || item.cat === activeCat;
+      const matchesQuery = !query || item.q.toLowerCase().includes(query) || item.a.toLowerCase().includes(query);
+      return matchesCat && matchesQuery;
+    });
+
+    listEl.innerHTML = "";
+    filtered.forEach((item) => {
+      const row = document.createElement("div");
+      row.className = "faq-row";
+      row.innerHTML = `
+        <div class="faq-row-top">
+          <div>
+            <span class="faq-row-cat">${CATEGORY_LABELS[item.cat]}</span>
+            <h3>${item.q}</h3>
+          </div>
+          <span class="faq-toggle-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">${item.a}</div>
+        </div>
+      `;
+      const top = row.querySelector(".faq-row-top");
+      const answer = row.querySelector(".faq-answer");
+      top.addEventListener("click", () => {
+        const isOpen = row.classList.toggle("open");
+        answer.style.maxHeight = isOpen ? answer.scrollHeight + "px" : "0px";
+      });
+      listEl.appendChild(row);
+    });
+
+    noResultsEl.style.display = filtered.length ? "none" : "block";
+    metaEl.textContent = `${filtered.length} question${filtered.length === 1 ? "" : "s"}`;
+  }
+
+  searchEl.addEventListener("input", draw);
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      chips.forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      activeCat = chip.dataset.cat;
+      draw();
+    });
+  });
+
+  draw();
+}
+
+/* ===== contact form (Let's Begin) ===== */
+const fileInput = document.getElementById("attachments");
+const fileArea = document.getElementById("fileArea");
+const fileList = document.getElementById("fileList");
+let selectedFiles = [];
+
+function addFiles(files) {
+  [...files].filter((f) => f.type.startsWith("image/")).forEach((file) => {
+    const dup = selectedFiles.some((f) => f.name === file.name && f.size === file.size);
+    if (!dup) selectedFiles.push(file);
+  });
+  renderFiles();
+}
+
+function renderFiles() {
+  fileList.innerHTML = "";
+  selectedFiles.forEach((file, i) => {
+    const item = document.createElement("div");
+    item.className = "file-item";
+
+    const name = document.createElement("span");
+    name.textContent = `${file.name} · ${formatSize(file.size)}`;
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "remove-file";
+    remove.textContent = "×";
+    remove.setAttribute("aria-label", `Remove ${file.name}`);
+    remove.addEventListener("click", (e) => {
+      e.stopPropagation();
+      selectedFiles.splice(i, 1);
+      renderFiles();
+    });
+
+    item.append(name, remove);
+    fileList.appendChild(item);
+  });
+}
+
+function formatSize(bytes) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+fileInput.addEventListener("change", () => {
+  addFiles(fileInput.files);
+  fileInput.value = "";
+});
+
+["dragenter", "dragover"].forEach((evt) => {
+  fileArea.addEventListener(evt, (e) => {
+    e.preventDefault();
+    fileArea.classList.add("dragging");
+  });
+});
+
+["dragleave", "drop"].forEach((evt) => {
+  fileArea.addEventListener(evt, (e) => {
+    e.preventDefault();
+    fileArea.classList.remove("dragging");
+  });
+});
+
+fileArea.addEventListener("drop", (e) => addFiles(e.dataTransfer.files));
+
+const form = document.getElementById("messageForm");
+const status = document.getElementById("formStatus");
+const sendButton = document.getElementById("sendButton");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const subject = document.getElementById("subject").value.trim();
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const message = document.getElementById("message").value.trim();
+
+  const formData = new FormData();
+  formData.append("_subject", subject || "Message from Project Voyage");
+  formData.append("name", name);
+  formData.append("email", email);
+  formData.append("message", message);
+  formData.append("_captcha", "false");
+  formData.append("_template", "table");
+  selectedFiles.forEach((file) => formData.append("attachments[]", file));
+
+  sendButton.disabled = true;
+  status.textContent = "Sending…";
+
+  try {
+    const res = await fetch("https://formsubmit.co/ajax/epirateship@proton.me", {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: formData
+    });
+
+    if (!res.ok) throw new Error("Request failed");
+
+    status.textContent = "Sent — thank you. We'll get back to you.";
+    form.reset();
+    selectedFiles = [];
+    renderFiles();
+  } catch (err) {
+    status.textContent = "Something went wrong. You can also email us directly at epirateship@proton.me.";
+  } finally {
+    sendButton.disabled = false;
+  }
+});
+</script>
+
+</body>
+</html>
